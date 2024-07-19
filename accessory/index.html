@@ -93,14 +93,21 @@
         var quoationData = []
 
         function calculatePrice(accessory) {
+            // Add your own logic to calculate the price based on the selected accessory
             switch (accessory) {
-                case "p123": return 100;
-                case "p234": return 150;
-                case "p456": return 75;
-                case "p996": return 50;
-                default: return 0;
+                case "p123":
+                    return 50;
+                case "p234":
+                    return 30;
+                case "p456":
+                    return 20;
+                case "p996":
+                    return 40;
+                default:
+                    return 0;
             }
         }
+        
 
         function addItem() {
             var accessory = $("#accessory").val(); 
