@@ -1,113 +1,164 @@
 <!DOCTYPE html>
-<html>
- 
+<html lang="en">
+
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Car Accessories</title>
-    <link rel="stylesheet" href="/css/global.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 60vw;
-        }
- 
-        th,
-        td {
-            text-align: left;
-            padding: 8px;
-        }
- 
-        tr:nth-child(even) {
-            background-color: #f7d2f0;
-        }
- 
-        .total {
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
 </head>
- 
+
 <body>
     <h1>Car Accessories</h1>
- 
-    <form id="accessoryForm">
-        <label for="accessory">Select an accessory:</label>
-        <select id="accessory" name="accessory">
-            <option value="p123">Car Cover</option>
-            <option value="p234">Seat Covers</option>
-            <option value="p456">Floor Mats</option>
-            <option value="p996">Door Visors</option>
-        </select>
-        <br>
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" min="1" value="1">
-        <br>
-        <button type="button" id="addButton">Add</button>
-    </form>
- 
-    <h2>Product List</h2>
- 
-    <table id="productList">
-        <tr>
-            <th>Accessory</th>
-            <th>Amount</th>
-            <th>Price</th>
-        </tr>
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Add Item
+    </button>
+
+    <table class="table table-striped table-bordered table-condensed" id="quotationTable">
+        <thead>
+            <tr>
+                <th>Quantity</th>
+                <th>Description</th>
+                <th>Unit Price</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+            <tr id="sub-total">
+                <td colspan="3" class="text-right">Subtotal</td>
+                <td colspan="1" class="text-right" id="subTotal">---</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-right">VAT</td>
+                <td colspan="1" class="text-right" id="vat">--</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-right">Shipping & Handling</td>
+                <td colspan="1" class="text-right" id="bottom-line">0.00</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-right">Total Due</td>
+                <td colspan="1" class="text-right" id="total">--</td>
+            </tr>
+        </tfoot>
     </table>
- 
-    <p class="total">Total Price: $<span id="totalPrice">0</span></p>
 
-    VAT: $<span id = "vatAmount">0</span><br>
-    Net Price: $<span id = "netPrice">0</span>
- 
+    <br>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLabel">Add Item</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <tr>
+                            <td><label for="accessory">Select an accessory:</label></td>
+                            <td>
+                                <select id="accessory" name="accessory">
+                                    <option value="p123">Car Cover</option>
+                                    <option value="p234">Seat Covers</option>
+                                    <option value="p456">Floor Mats</option>
+                                    <option value="p996">Door Visors</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="amount">Amount:</label></td>
+                            <td><input type="number" id="amount" name="amount" min="1" value="1"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addItem()">Save New Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script>
-        $(document).ready(function() {
-            var totalPrice = 0; 
-            $("#addButton").click(function () {
-                var accessory = $("#accessory").val();
-                var accessoryName = $("#accessory option:selected").text();
-                var amount = $("#amount").val();
-                var price = calculatePrice(accessory) * amount;
 
-                var newRow = "<tr><td>" + accessoryName + "</td><td>" + amount + "</td><td>$" + price.toFixed(2) + "</td></tr>";
-                $("#productList").append(newRow);
+        var quoationData = []
 
-                updateTotalPrice(price);
-                calculateVAT();
-            });
-
- 
- 
         function calculatePrice(accessory) {
-            // Add your own logic to calculate the price based on the selected accessory
             switch (accessory) {
-                case "p123":
-                    return 50;
-                case "p234":
-                    return 30;
-                case "p456":
-                    return 20;
-                case "p996":
-                    return 40;
-                default:
-                    return 0;
+                case "p123": return 100;
+                case "p234": return 150;
+                case "p456": return 75;
+                case "p996": return 50;
+                default: return 0;
             }
         }
 
-        function updateTotalPrice(price){
-            totalPrice +=price;
-            $("#totalPrice").text(totalPrice.toFixed(2));
+        function addItem() {
+            var accessory = $("#accessory").val(); 
+            var amount = $("#amount").val(); 
+            var unitPrice = calculatePrice(accessory); 
+            var price = unitPrice * amount; 
+
+            quoationData.push({
+                description: $("#accessory option:selected").text(),
+                quantity: Number.parseInt(amount),
+                unitPrice: Number.parseFloat(unitPrice), 
+                price: Number.parseFloat(price)
+            })
+            $('#exampleModal').modal('hide')
+            renderTable()
         }
-        function calculateVAT() {
-            let grossPrice = totalPrice;
-            let vatRate = 0.07;
-            let vatAmount = grossPrice * vatRate;
-            $("#vatAmount").text(vatAmount.toFixed(2));
-            $("#netPrice").text((grossPrice + vatAmount).toFixed(2));
+
+        function renderTable() {
+            var data = quoationData
+            var subTotal = 0
+            data.forEach((e) => {
+                subTotal = subTotal + (e.unitPrice * e.quantity)
+            })
+            var vat = (subTotal * .07).toFixed(2)
+            var total = (subTotal * 1.07).toFixed(2)
+
+            console.log('subTotal', subTotal)
+            $("#subTotal").html("" + subTotal.toFixed(2)) 
+            $("#total").html("" + total) 
+
+            var dataRows = data.map((e, i) => {
+                let amount = e.quantity * e.unitPrice
+                return `<tr class="data-row">
+                    <td class="text-center">${e.quantity}</td>
+                    <td class="data">
+                        <button onclick="deleteItem(${i})">X</button>
+                        ${e.description}
+                    </td>
+                    <td class="text-right">${e.unitPrice.toFixed(2)}</td>
+                    <td class="text-right">${amount.toFixed(2)}</td>
+                </tr>`;
+            })
+
+            $(".data-row").remove()
+
+            // Insert into the table body
+            $('#quotationTable tbody').append(dataRows)
         }
-    });
+
+        function deleteItem(i) {
+            quoationData.splice(i, 1)
+            renderTable()
+        }
+
     </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
 </body>
- 
+
 </html>
