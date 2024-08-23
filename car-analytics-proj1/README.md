@@ -27,7 +27,7 @@ The car analytics app is a react-based web app that allows user to filter, analy
 - Homepage : Users can view the car data overview, filter cars by brands using dropdown menu and can also highlight cars thst they prefer.
 - Higlighted Car Page : In this page users can view cars that they higlighted and they can also remove the cars they wish to remove from the highlighted car page
 - Dashboard : Users can view the total value and the cars of each brand and also view the car data overview(pie chart,stacked bar chart)
-- 
+
 ## Team_Member
  Vibol Rothmony Seng
  Paveena Chuayaem
