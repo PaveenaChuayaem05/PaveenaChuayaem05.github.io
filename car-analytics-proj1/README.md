@@ -6,8 +6,6 @@ The car analytics app is a react-based web app that allows user to filter, analy
  
 ## Table of Contents (Optional)
  
-If your README is long, add a table of contents to make it easy for users to find what they need.
- 
 - [Feature](#Feature)
 - [Library](#Library)
 - [Pages](#Pages)
